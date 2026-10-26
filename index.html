@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171717">
+  <meta name="description" content="Patrik Tengler — tvorba čistých a moderních webů pro firmy a živnostníky.">
+  <link rel="icon" type="image/png" href="logo.png">
+  <title>Patrik Tengler — weby, které dávají smysl</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #171717;
+      --surface: #202020;
+      --surface-light: #292929;
+      --text: #f2f0ed;
+      --muted: #a5a39f;
+      --line: rgba(255, 255, 255, 0.12);
+      --accent: #d6d2ca;
+      --page-width: 1120px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 96px;
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 78% 10%, rgba(255, 255, 255, 0.075), transparent 31rem),
+        radial-gradient(ellipse at 8% 52%, rgba(255, 255, 255, 0.035), transparent 28rem),
+        var(--background);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .container {
+      width: min(var(--page-width), calc(100% - 48px));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: fixed;
+      z-index: 10;
+      inset: 0 0 auto;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(23, 23, 23, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .header-inner {
+      display: flex;
+      min-height: 76px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 0.96rem;
+      font-weight: 650;
+      letter-spacing: -0.025em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      aspect-ratio: 1;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: color 160ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--text);
+    }
+
+    .nav-links .nav-contact {
+      padding: 9px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--text);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    main {
+      overflow: hidden;
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      min-height: min(790px, 100svh);
+      align-items: center;
+      padding-block: 150px 100px;
+    }
+
+    .hero::before {
+      position: absolute;
+      z-index: -1;
+      inset: 0 auto 0 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: url("kody.jpg") center / cover no-repeat;
+      content: "";
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 810px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d8d5ce;
+      content: "";
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      position: relative;
+      isolation: isolate;
+      max-width: 850px;
+      margin-bottom: 25px;
+      font-size: clamp(3.4rem, 8.5vw, 7.4rem);
+      font-weight: 520;
+      letter-spacing: -0.085em;
+      line-height: 0.98;
+    }
+
+    h1 span {
+      color: #92908c;
+    }
+
+    .hero-copy {
+      max-width: 570px;
+      margin-bottom: 34px;
+      color: var(--muted);
+      font-size: clamp(1.03rem, 2vw, 1.2rem);
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 21px;
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      background: var(--accent);
+      color: #171717;
+      font-size: 0.9rem;
+      font-weight: 650;
+      text-decoration: none;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      background: #f0ede7;
+    }
+
+    .button-arrow {
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    .section {
+      padding-block: 105px;
+      border-top: 1px solid var(--line);
+    }
+
+
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: 0.7fr 1.3fr;
+      gap: 32px;
+      margin-bottom: 52px;
+    }
+
+    .section-label {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      max-width: 680px;
+      margin-bottom: 0;
+      font-size: clamp(2.15rem, 5vw, 4.2rem);
+      font-weight: 500;
+      letter-spacing: -0.065em;
+      line-height: 1.08;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.7fr 1.3fr;
+      gap: 32px;
+    }
+
+    .about-note {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .about-note strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .about-note span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .about-copy {
+      max-width: 690px;
+      margin: 0;
+      color: #c2c0bc;
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      line-height: 1.75;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .service-card {
+      min-height: 235px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    }
+
+    .process-card {
+      grid-column: span 2;
+      min-height: 235px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    }
+
+    .process-card:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+
+    .service-number {
+      display: block;
+      margin-bottom: 48px;
+      color: #888681;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    .process-card .service-number {
+      margin-bottom: 32px;
+    }
+
+    .service-card h3,
+    .process-card h3 {
+      margin-bottom: 9px;
+      font-size: 1.18rem;
+      font-weight: 560;
+      letter-spacing: -0.03em;
+    }
+
+    .service-card p,
+    .process-card p {
+      max-width: 290px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 0.91rem;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .price-card {
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    }
+
+    .price-card h3 {
+      margin-bottom: 12px;
+      font-size: 1.15rem;
+      font-weight: 560;
+      letter-spacing: -0.03em;
+    }
+
+    .price {
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 550;
+      letter-spacing: -0.065em;
+      line-height: 1.1;
+    }
+
+    .price span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 450;
+      letter-spacing: 0;
+    }
+
+    .price-description {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .reference-card {
+      display: flex;
+      min-height: 220px;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+      text-decoration: none;
+      transition: border-color 160ms ease, transform 160ms ease;
+    }
+
+    .reference-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .reference-type {
+      margin-bottom: auto;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .reference-card h3 {
+      margin: 30px 0 8px;
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      font-weight: 550;
+      letter-spacing: -0.06em;
+    }
+
+    .reference-card p {
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .reference-link {
+      color: var(--text);
+      font-size: 0.9rem;
+      text-underline-offset: 5px;
+    }
+
+    .contact-section {
+      padding-bottom: 115px;
+    }
+
+    .contact-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 32px;
+      padding: clamp(28px, 6vw, 64px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background:
+        radial-gradient(ellipse at 90% 0%, rgba(255, 255, 255, 0.08), transparent 55%),
+        var(--surface);
+    }
+
+    .contact-panel h2 {
+      max-width: 570px;
+      margin-bottom: 16px;
+    }
+
+    .contact-panel p {
+      max-width: 490px;
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .contact-links {
+      display: grid;
+      gap: 13px;
+      min-width: 245px;
+    }
+
+    .contact-links a {
+      color: var(--text);
+      font-size: 0.95rem;
+      text-decoration-color: rgba(255, 255, 255, 0.3);
+      text-underline-offset: 5px;
+    }
+
+    .site-footer {
+      padding-block: 23px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .site-footer p {
+      margin: 0;
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(var(--page-width), calc(100% - 36px));
+      }
+
+      .header-inner {
+        min-height: 68px;
+      }
+
+      .menu-toggle {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 18px;
+        left: 18px;
+        display: none;
+        align-items: stretch;
+        gap: 0;
+        padding: 9px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(29, 29, 29, 0.97);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      }
+
+      .nav-links.is-open {
+        display: grid;
+      }
+
+      .nav-links a,
+      .nav-links .nav-contact {
+        padding: 12px 13px;
+        border: 0;
+        border-radius: 9px;
+      }
+
+      .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .hero {
+        min-height: 760px;
+        min-height: min(760px, 100svh);
+        padding-block: 130px 80px;
+      }
+
+      .section {
+        padding-block: 78px;
+      }
+
+      .section-heading,
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+
+      .section-heading {
+        margin-bottom: 34px;
+      }
+
+      .about-note {
+        padding: 19px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-card,
+      .process-card:nth-child(4) {
+        grid-column: auto;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .service-card {
+        min-height: 205px;
+      }
+
+      .service-number {
+        margin-bottom: 34px;
+      }
+
+      .contact-panel {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .contact-links {
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .footer-inner {
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: clamp(3.25rem, 15vw, 4rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#domu" aria-label="PTstudio — úvod">
+        <span class="brand-mark" aria-hidden="true">PT</span>
+        <span>PTstudio</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Otevřít navigaci" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav-links" id="site-nav" aria-label="Hlavní navigace">
+        <a href="#o-mne">O mně</a>
+        <a href="#sluzby">Co dělám</a>
+        <a href="#postup">Jak to probíhá</a>
+        <a href="#reference">Reference</a>
+        <a href="#cenik">Ceník</a>
+        <a class="nav-contact" href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container" id="domu">
+      <div class="hero-content">
+        <p class="eyebrow">Weby pro firmy a živnostníky</p>
+        <h1>Pomáhám být<br><span>vidět online.</span></h1>
+        <p class="hero-copy">Tvořím čisté a moderní weby, které představí vaše služby, osloví zákazníky a pomohou vaší značce vyniknout na internetu.</p>
+        <a class="button" href="#kontakt">Nezávazně probrat web <span class="button-arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <section class="section" id="o-mne">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">01 / O mně</p>
+          <h2>Jsem Patrik. Baví mě tvořit weby, které mají smysl.</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-note">
+            <strong>Student informatiky</strong>
+            <span>Weby pro firmy a živnostníky</span>
+          </div>
+          <p class="about-copy">Jsem student informatiky a mám zkušenosti s tvorbou webů pro firmy a živnostníky. Pomáhám jim ukázat, co dělají, představit jejich nabídku a být lépe vidět na internetu — s přehledným webem, který návštěvníky nasměruje k dalšímu kroku.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sluzby">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">02 / Co dělám</p>
+          <h2>Jednoduchý web. Jasná prezentace. Více prostoru pro vaše podnikání.</h2>
+        </div>
+        <div class="services-grid">
+          <article class="service-card">
+            <span class="service-number">01 — PREZENTACE</span>
+            <h3>Web pro vaše podnikání</h3>
+            <p>Přehledná stránka, která představí vaši firmu, služby i to, čím jste jedineční.</p>
+          </article>
+          <article class="service-card">
+            <span class="service-number">02 — PRVNÍ DOJEM</span>
+            <h3>Čistý a moderní design</h3>
+            <p>Promyšlený vzhled a srozumitelný obsah, ve kterém se návštěvníci rychle zorientují.</p>
+          </article>
+          <article class="service-card">
+            <span class="service-number">03 — VIDITELNOST</span>
+            <h3>Víc než jen vizitka</h3>
+            <p>Web, který ukáže vaši nabídku a pomůže zákazníkům udělat další krok.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="postup">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">03 / Jak to probíhá</p>
+          <h2>Od prvního kontaktu až po zveřejnění webu.</h2>
+        </div>
+        <div class="process-grid">
+          <article class="process-card">
+            <span class="service-number">01 — DOMLUVA</span>
+            <h3>Řeknete mi svou představu</h3>
+            <p>Napište mi e-mailem nebo zavolejte. Společně domluvíme, jaký obsah a informace chcete na webu zveřejnit.</p>
+          </article>
+          <article class="process-card">
+            <span class="service-number">02 — NÁVRH</span>
+            <h3>Připravím návrh webu</h3>
+            <p>Návrh vám ukážu, abyste si mohli ověřit, že vám web vyhovuje a líbí se vám. Podle domluvy ho případně upravíme.</p>
+          </article>
+          <article class="process-card">
+            <span class="service-number">03 — PLATBA</span>
+            <h3>Domluvíme cenu</h3>
+            <p>Cena se odvíjí od velikosti a náročnosti webu. Platba probíhá převodem na účet.</p>
+          </article>
+          <article class="process-card">
+            <span class="service-number">04 — ZVEŘEJNĚNÍ</span>
+            <h3>Web připravím na internetu</h3>
+            <p>Web zveřejním přes svůj hosting. Doménu můžeme vybrat podle vašich představ, nebo použít tu, kterou už vlastníte.</p>
+          </article>
+          <article class="process-card">
+            <span class="service-number">05 — CO OČEKÁVAT</span>
+            <h3>Budete mít vlastní web</h3>
+            <p>Zveřejnění webu samo o sobě nezaručí spoustu zákazníků ze dne na den. Do budoucna vám ale může pomoci oslovit nové zákazníky a budete mít vlastní prezentaci na internetu.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="reference">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">04 / Reference</p>
+          <h2>Ukázka projektu, na kterém jsem pracoval.</h2>
+        </div>
+        <a class="reference-card" href="https://kontejner.pro" target="_blank" rel="noopener noreferrer">
+          <span class="reference-type">Projekt pro klienta</span>
+          <h3>Kontejner.pro</h3>
+          <p>Webový projekt vytvořený pro klienta.</p>
+          <span class="reference-link">Navštívit web <span aria-hidden="true">↗</span></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="cenik">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-label">05 / Ceník</p>
+          <h2>Jasný začátek, cena podle rozsahu.</h2>
+        </div>
+        <div class="pricing-grid">
+          <article class="price-card">
+            <h3>Tvorba webu</h3>
+            <p class="price">4 000–7 000 Kč</p>
+            <p class="price-description">Orientační cena. Přesnou částku domluvíme podle velikosti a náročnosti webu.</p>
+          </article>
+          <article class="price-card">
+            <h3>Webhosting</h3>
+            <p class="price">1 000 Kč <span>/ měsíc</span></p>
+            <p class="price-description">V ceně je zajištění hostingu, průběžná kontrola funkčnosti a toho, jak si web vede, i průběžné úpravy a vylepšení webu.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="kontakt">
+      <div class="container">
+        <div class="contact-panel">
+          <div>
+            <p class="section-label">06 / Kontakt</p>
+            <h2>Máte zájem o vlastní web?</h2>
+            <p>Ozvěte se mi a nezávazně probereme vaše představy, rozsah webu i orientační cenu. Rád vám pomůžu najít vhodné řešení.</p>
+          </div>
+          <div class="contact-links">
+            <a href="mailto:tengler.patrik.xtb@gmail.com">tengler.patrik.xtb@gmail.com</a>
+            <a href="tel:+420737292190">+420 737 292 190</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> Patrik Tengler</p>
+      <p>Tvořím weby, které pomáhají být vidět.</p>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navigation = document.querySelector("#site-nav");
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+      menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Otevřít navigaci" : "Zavřít navigaci");
+      navigation.classList.toggle("is-open", !isOpen);
+    });
+
+    navigation.addEventListener("click", (event) => {
+      if (event.target instanceof HTMLAnchorElement) {
+        navigation.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Otevřít navigaci");
+      }
+    });
+
+    document.querySelector("#year").textContent = String(new Date().getFullYear());
+  </script>
+</body>
+</html>
